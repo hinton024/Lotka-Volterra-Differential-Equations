@@ -53,7 +53,7 @@ class SimulationDataset(object):
 
     """Docstring for SimulationDataset. """
 
-    def __init__(self, sim in ['charge', 'superposition'], n=5, dim=2,
+    def __init__(self, sim == ['charge', 'superposition'], n=5, dim=2,
             dt=0.01, nt=100, extra_potential=None,
             **kwargs):
         """TODO: to be defined.
