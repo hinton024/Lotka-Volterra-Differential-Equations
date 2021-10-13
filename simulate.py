@@ -28,70 +28,22 @@ def get_potential(sim, sim_obj):
 
     dim = sim_obj._dim
 
-    @jit
+    
     def potential(x1, x2):
       """The potential between nodes x1 and x2"""
       dist = np.sqrt(np.sum(np.square(x1[:dim] - x2[:dim])))
-      #Prevent singularities:
+     
       min_dist = 1e-2
     #   bounded_dist = dist*(dist > min_dist) + min_dist*(dist <= min_dist)
       bounded_dist = dist + min_dist
 
-
-    #   test_dist(jax.device_get(np.sum(np.any(dist <= min_dist))))
-
-      if sim == 'r2':
-          return -x1[-1]*x2[-1]/bounded_dist
-      elif sim == 'r1':
-          return x1[-1]*x2[-1]*np.log(bounded_dist)
-      elif sim in ['spring', 'damped']:
-          potential = (bounded_dist - 1)**2
-          if sim == 'damped':
-            damping = 1
-            potential += damping*x1[1]*x1[1+sim_obj._dim]/sim_obj._n
-            potential += damping*x1[0]*x1[0+sim_obj._dim]/sim_obj._n
-            if sim_obj._dim == 3:
-                potential += damping*x1[2]*x1[2+sim_obj._dim]/sim_obj._n
-
-          return potential
-      elif sim == 'string':
-          return (bounded_dist - 1)**2 + x1[1]*x1[-1]
-      elif sim == 'string_ball':
-          potential = (bounded_dist - 1)**2 + x1[1]*x1[-1]
-          r = np.sqrt((x1[1] + 15)**2 + (x1[0] - 5)**2)
-          radius = 4
-          potential += 10000/np.log(1+np.exp(10000*(r-radius)))#ball
-          return potential
-
-      elif sim in ['charge', 'superposition']:
+      if sim in ['charge', 'superposition']:
           charge1 = x1[-2]
           charge2 = x2[-2]
 
           potential = charge1*charge2/bounded_dist
-          if sim in ['superposition']:
-              m1 = x1[-1]
-              m2 = x2[-1]
-              potential += -m1*m2/bounded_dist
         
           return potential
-      elif sim in ['discontinuous']:
-          m1 = x1[-1]
-          m2 = x2[-1]
-          q1 = x1[-2]
-          q2 = x2[-2]
-          pot_a = 0.0
-          pot_b = 0.0 #-m1*m2/bounded_dist
-          pot_c = (bounded_dist - 1)**2
-
-          potential = (
-            pot_a * (bounded_dist < 1) +
-            (bounded_dist >= 1) * (
-            pot_b * (bounded_dist < 2) +
-            pot_c * (bounded_dist >= 2))
-          )
-          return potential
-        
-
       else:
           raise NotImplementedError('No such simulation ' + str(sim))
 
@@ -101,7 +53,7 @@ class SimulationDataset(object):
 
     """Docstring for SimulationDataset. """
 
-    def __init__(self, sim='r2', n=5, dim=2,
+    def __init__(self, sim in ['charge', 'superposition'], n=5, dim=2,
             dt=0.01, nt=100, extra_potential=None,
             **kwargs):
         """TODO: to be defined.
@@ -135,9 +87,9 @@ class SimulationDataset(object):
         dim = self._dim 
 
         sim = self._sim
-        # params = 1
-        # if sim in ['charge']:
-        #     params = 2
+        params = 1
+        if sim in ['charge']:
+           params = 2
         params = 2
         total_dim = dim*2+params
         times = self.times
@@ -149,7 +101,7 @@ class SimulationDataset(object):
         def total_potential(xt):
           sum_potential = np.zeros(())
           for i in range(n - 1):
-            if sim in ['string', 'string_ball']:
+            if sim in ['charge', 'superposition']:
                 #Only with adjacent nodes
                 sum_potential = sum_potential + G*vp(xt[i], xt[[i+1]]).sum()
             else:
@@ -158,35 +110,8 @@ class SimulationDataset(object):
             sum_potential = sum_potential + vex(xt).sum()
           return sum_potential
 
-        @jit
-        def force(xt):
-          return -grad(total_potential)(xt)[:, :dim]
-
-        @jit
-        def acceleration(xt):
-          return force(xt)/xt[:, -1, np.newaxis]
-
-        unpacked_shape = (n, total_dim)
-        packed_shape = n*total_dim
-
-
-        @jit
-        def odefunc(y, t):
-          dim = self._dim
-          y = y.reshape(unpacked_shape)
-          a = acceleration(y)
-          return np.concatenate(
-              [y[:, dim:2*dim],
-               a, 0.0*y[:, :params]], axis=1).reshape(packed_shape)
-
-        @partial(jit, backend='cpu')
+       
         def make_sim(key):
-            if sim in ['string', 'string_ball']:
-                x0 = random.normal(key, (n, total_dim))
-                x0 = index_update(x0, s_[..., -1], 1); #const mass
-                x0 = index_update(x0, s_[..., 0], np.arange(n)+x0[...,0]*0.5)
-                x0 = index_update(x0, s_[..., 2:3], 0.0)
-            else:
                 x0 = random.normal(key, (n, total_dim))
                 x0 = index_update(x0, s_[..., -1], np.exp(x0[..., -1])); #all masses set to positive
                 if sim in ['charge', 'superposition']:
@@ -208,43 +133,10 @@ class SimulationDataset(object):
             data.append(make_sim(key))
         self.data = np.array(data)
 
-    def get_acceleration(self):
-        vp = jit(vmap(self.pairwise, (None, 0), 0))
-        n = self._n
-        dim = self._dim 
-        sim = self._sim
-        params = 2
-        total_dim = dim*2+params
-        times = self.times
-        G = self.G
-        if self.extra_potential is not None:
-          vex = vmap(self.extra_potential, 0, 0)
-        @jit
-        def total_potential(xt):
-          sum_potential = np.zeros(())
-          for i in range(n - 1):
-            if sim in ['string', 'string_ball']:
-                #Only with adjacent nodes
-                sum_potential = sum_potential + G*vp(xt[i], xt[[i+1]]).sum()
-            else:
-                sum_potential = sum_potential + G*vp(xt[i], xt[i+1:]).sum()
-          if self.extra_potential is not None:
-            sum_potential = sum_potential + vex(xt).sum()
-          return sum_potential
 
         @jit
         def force(xt):
           return -grad(total_potential)(xt)[:, :dim]
-
-        @jit
-        def acceleration(xt):
-          return force(xt)/xt[:, -1, np.newaxis]
-
-        vacc = vmap(acceleration, 0, 0)
-        # ^ over time
-        vacc2 = vmap(vacc, 0, 0)
-        # ^ over batch
-        return vacc2(self.data)
 
     def plot(self, i, animate=False, plot_size=True, s_size=1):
         #Plots i
@@ -254,7 +146,7 @@ class SimulationDataset(object):
         sim = self._sim
         masses = x_times[:, :, -1]
         if not animate:
-            if sim in ['string', 'string_ball']:
+            if sim in ['charge', 'superposition']:
                 rgba = make_transparent_color(len(times), 0)
                 for i in range(0, len(times), len(times)//10):
                     ctimes = x_times[i]
@@ -269,7 +161,7 @@ class SimulationDataset(object):
                   else:
                     plt.scatter(x_times[:, j, 0], x_times[:, j, 1], color=rgba, s=s_size)
         else:
-            if sim in ['string', 'string_ball']: raise NotImplementedError
+            if sim in ['charge', 'superposition']: raise NotImplementedError
             fig = plt.figure()
             camera = Camera(fig)
             d_idx = 20
