@@ -156,45 +156,45 @@ class SimulationDataset(object):
 
           
 
-        def plot(self, i, animate=False, plot_size=True, s_size=1):
-            #Plots i
-            n = self._n
-            times = onp.array(self.times)
-            x_times = onp.array(self.data[i])
-            sim = self._sim
-            masses = x_times[:, :, -1]
-            if not animate:
-                if sim in 'charge':
-                    rgba = make_transparent_color(len(times), 0)
-                    for i in range(0, len(times), len(times)//10):
-                        ctimes = x_times[i]
-                        plt.plot(ctimes[:, 0], ctimes[:, 1], color=rgba[i])
-                    plt.xlim(-5, 20)
-                    plt.ylim(-20, 5)
-                else:
-                    for j in range(n):
-                      rgba = make_transparent_color(len(times), j/n)
-                      if plot_size:
-                        plt.scatter(x_times[:, j, 0], x_times[:, j, 1], color=rgba, s=3*masses[:, j]*s_size)
-                      else:
-                        plt.scatter(x_times[:, j, 0], x_times[:, j, 1], color=rgba, s=s_size)
+    def plot(self, i, animate=False, plot_size=True, s_size=1):
+        #Plots i
+        n = self._n
+        times = onp.array(self.times)
+        x_times = onp.array(self.data[i])
+        sim = self._sim
+        masses = x_times[:, :, -1]
+        if not animate:
+            if sim in 'charge':
+                rgba = make_transparent_color(len(times), 0)
+                for i in range(0, len(times), len(times)//10):
+                    ctimes = x_times[i]
+                    plt.plot(ctimes[:, 0], ctimes[:, 1], color=rgba[i])
+                plt.xlim(-5, 20)
+                plt.ylim(-20, 5)
             else:
-                if sim in 'charge': raise NotImplementedError
-                fig = plt.figure()
-                camera = Camera(fig)
-                d_idx = 20
-                for t_idx in range(d_idx, len(times), d_idx):
-                    start = max([0, t_idx-300])
-                    ctimes = times[start:t_idx]
-                    cx_times = x_times[start:t_idx]
-                    for j in range(n):
-                      rgba = make_transparent_color(len(ctimes), j/n)
-                      if plot_size:
-                        plt.scatter(cx_times[:, j, 0], cx_times[:, j, 1], color=rgba, s=3*masses[:, j])
-                      else:
-                        plt.scatter(cx_times[:, j, 0], cx_times[:, j, 1], color=rgba, s=s_size)
-    #                 plt.xlim(-10, 10)
-    #                 plt.ylim(-10, 10)
-                    camera.snap()
-                from IPython.display import HTML
-                return HTML(camera.animate().to_jshtml())
+                for j in range(n):
+                  rgba = make_transparent_color(len(times), j/n)
+                  if plot_size:
+                    plt.scatter(x_times[:, j, 0], x_times[:, j, 1], color=rgba, s=3*masses[:, j]*s_size)
+                  else:
+                    plt.scatter(x_times[:, j, 0], x_times[:, j, 1], color=rgba, s=s_size)
+        else:
+            if sim in 'charge': raise NotImplementedError
+            fig = plt.figure()
+            camera = Camera(fig)
+            d_idx = 20
+            for t_idx in range(d_idx, len(times), d_idx):
+                start = max([0, t_idx-300])
+                ctimes = times[start:t_idx]
+                cx_times = x_times[start:t_idx]
+                for j in range(n):
+                  rgba = make_transparent_color(len(ctimes), j/n)
+                  if plot_size:
+                    plt.scatter(cx_times[:, j, 0], cx_times[:, j, 1], color=rgba, s=3*masses[:, j])
+                  else:
+                    plt.scatter(cx_times[:, j, 0], cx_times[:, j, 1], color=rgba, s=s_size)
+#                 plt.xlim(-10, 10)
+#                 plt.ylim(-10, 10)
+                camera.snap()
+            from IPython.display import HTML
+            return HTML(camera.animate().to_jshtml())
