@@ -133,16 +133,16 @@ class SimulationDataset(object):
 
        
         def make_sim(key):
-                x0 = random.normal(key, (n, total_dim))
-                if sim in 'charge':
-                    x0 = index_update(x0, s_[..., -2], np.sign(x0[..., -2])); #charge is 1 or -1
+          x0 = random.normal(key, (n, total_dim))
+          if sim in 'charge':
+              x0 = index_update(x0, s_[..., -2], np.sign(x0[..., -2])); #charge is 1 or -1
 
-                x_times = odeint(
-                    odefunc,
-                    x0.reshape(packed_shape),
-                    times, mxstep=2000).reshape(-1, *unpacked_shape)
+          x_times = odeint(
+              odefunc,
+              x0.reshape(packed_shape),
+              times, mxstep=2000).reshape(-1, *unpacked_shape)
 
-                return x_times
+          return x_times
 
         keys = random.split(rng, ns)
         vmake_sim = jit(vmap(make_sim, 0, 0), backend='cpu')
