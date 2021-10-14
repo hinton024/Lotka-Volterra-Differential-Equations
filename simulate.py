@@ -107,50 +107,50 @@ class SimulationDataset(object):
             sum_potential = sum_potential + vex(xt).sum()
           return sum_potential
 
-          @jit
-          def force(xt):
-            return -grad(total_potential)(xt)[:, :dim]
+        @jit
+        def force(xt):
+          return -grad(total_potential)(xt)[:, :dim]
 
-          @jit
-          def acceleration(xt):
-            return force(xt)/xt[:, -1, np.newaxis]
+        @jit
+        def acceleration(xt):
+          return force(xt)/xt[:, -1, np.newaxis]
 
-          unpacked_shape = (n, total_dim)
-          packed_shape = n*total_dim
+        unpacked_shape = (n, total_dim)
+        packed_shape = n*total_dim
 
 
-          @jit
-          def odefunc(y, t):
-            dim = self._dim
-            y = y.reshape(unpacked_shape)
-            a = acceleration(y)
-            return np.concatenate(
-                [y[:, dim:2*dim],
-                a, 0.0*y[:, :params]], axis=1).reshape(packed_shape)
+        @jit
+        def odefunc(y, t):
+          dim = self._dim
+          y = y.reshape(unpacked_shape)
+          a = acceleration(y)
+          return np.concatenate(
+              [y[:, dim:2*dim],
+              a, 0.0*y[:, :params]], axis=1).reshape(packed_shape)
 
-          @partial(jit, backend='cpu')
+        @partial(jit, backend='cpu')
 
        
-        def make_sim(key):
-                x0 = random.normal(key, (n, total_dim))
-                if sim in 'charge':
-                    x0 = index_update(x0, s_[..., -2], np.sign(x0[..., -2])); #charge is 1 or -1
+    def make_sim(key):
+            x0 = random.normal(key, (n, total_dim))
+            if sim in 'charge':
+                x0 = index_update(x0, s_[..., -2], np.sign(x0[..., -2])); #charge is 1 or -1
 
-                x_times = odeint(
-                    odefunc,
-                    x0.reshape(packed_shape),
-                    times, mxstep=2000).reshape(-1, *unpacked_shape)
+            x_times = odeint(
+                odefunc,
+                x0.reshape(packed_shape),
+                times, mxstep=2000).reshape(-1, *unpacked_shape)
 
-                return x_times
+            return x_times
 
-        keys = random.split(rng, ns)
-        vmake_sim = jit(vmap(make_sim, 0, 0), backend='cpu')
-        # self.data = jax.device_get(vmake_sim(keys))
-        # self.data = np.concatenate([jax.device_get(make_sim(key)) for key in keys])
-        data = []
-        for key in tqdm(keys):
-            data.append(make_sim(key))
-        self.data = np.array(data)
+    keys = random.split(rng, ns)
+    vmake_sim = jit(vmap(make_sim, 0, 0), backend='cpu')
+    # self.data = jax.device_get(vmake_sim(keys))
+    # self.data = np.concatenate([jax.device_get(make_sim(key)) for key in keys])
+    data = []
+    for key in tqdm(keys):
+        data.append(make_sim(key))
+    self.data = np.array(data)
 
 
        
