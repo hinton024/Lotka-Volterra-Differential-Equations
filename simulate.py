@@ -15,7 +15,7 @@ from multiprocessing import Pool, cpu_count
 from celluloid import Camera
 s_ = onp.s_
 tqdm = lambda _: _
-
+#test github
 def make_transparent_color(ntimes, fraction):
   rgba = onp.ones((ntimes, 4))
   alpha = onp.linspace(0, 1, ntimes)[:, np.newaxis]
