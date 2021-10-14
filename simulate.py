@@ -94,6 +94,7 @@ class SimulationDataset(object):
         if self.extra_potential is not None:
           vex = vmap(self.extra_potential, 0, 0)
 
+
         @jit
         def total_potential(xt):
           sum_potential = np.zeros(())
