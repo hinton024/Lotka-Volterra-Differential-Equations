@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{pythontex}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{amssymb}
+\usepackage{pgfkeys}
+\usepackage{etoolbox}
+\usepackage{ifthen}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{a4wide}
+\usepackage[utf8]{inputenc}
+%Please add the following packages if necessary:
+\usepackage{booktabs, multirow} % for borders and merged ranges
+\usepackage{soul}% for underlines
+\usepackage[table]{xcolor} % for cell colors
+\usepackage{changepage,threeparttable} % for wide tables
+\usepackage{array}     %centering of data in table
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}  %centering of data in table
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+\begin{document}
+
+\newpage
+
+\section{Predator Prey Model}
+The model satisfies the
+system of ODEs: \\
+\begin{equation*}
+\frac { d x } { d t } = x ( \alpha - \beta y )
+\end{equation*}
+\begin{equation*}
+\frac { d y } { d t } = - y ( \gamma - \delta x )
+\end{equation*}
+
+where,
+\begin{itemize}
+    \item x is the number of prey.
+    \item y is the number of some predator.
+    \item $ \frac { d y } { d t } $ and $ \frac { d x } { d t } $ represent the growth rates of the two populations over time
+    \item t represents time.
+    \item $ \alpha , \beta , \gamma $ and $ \delta $ are parameters describing the interaction of the two species.
+\end{itemize}
+\subsection*{Physical meaning of the equations}
+\begin{enumerate}
+    \item The prey population finds ample food at all times.
+    \item The food supply of the predator population depends entirely on the size of the prey population.
+    \item The rate of change of population is proportional to its size.
+    \item During the process, the environment does not change in favour of one species and the genetic adaptation is sufficiently slow.
+    \item Predators have limitless appetite
+
+\end{enumerate}
+
+\subsection*{Prey Equation}
+\begin{equation*}
+     \frac { d x } { d t } = \alpha x - \beta x y = f(x,y)
+\end{equation*}
+
+The prey are assumed to have an unlimited food supply, and to reproduce exponentially unless subject to predation;
+this exponential growth is represented in the equation above by the term $ \alpha x . $ The rate of predation upon the prey is
+assumed to be proportional to the rate at which the predators and the prey meet; this is represented above by $ \beta x y $. If
+either $ x $ or $ y $ is zero then there can be no predation.
+
+\subsection*{Predator Equation}
+\begin{equation*}
+    \frac { d y } { d t } = \delta x y - \gamma y = g(x,y)
+\end{equation*}
+
+In this equation, $ \delta x y $ represents the growth of the predator population. (Note the similarity to the predation rate;
+however, a different constant is used as the rate at which the predator population grows is not necessarily equal to the
+rate at which it consumes the prey). $ \gamma y $ represents the loss rate of the predators due to either natural death or
+emigration; it leads to an exponential decay in the absence of prey.
+
+\subsection*{Population Equilibrium(x_{eq},y_{eq})}
+Population equilibrium occurs in the model when neither of the population levels is changing, i.e. when both of the
+derivatives are equal to $ 0 . $ These points are called critical points.
+\begin{equation*}
+    \frac { d y } { d t } = \delta x y - \gamma y = 0
+\end{equation*}
+\begin{equation*}
+     \frac { d x } { d t } = \alpha x - \beta x y = 0
+\end{equation*}
+
+The possibilities are, 
+\begin{itemize}
+    \item $ y = 0 $ , $ x = 0 $ so $ y_{eq} = 0 $ , $ x_{eq} = 0 $
+    \item \alpha - \beta y = 0 \Longrightarrow $y_{eq} = \frac{\alpha}{\beta}$ similarily $x_{eq} = \frac{\gamma}{\delta}$
+\end{itemize}
+\section*{Linear Analysis}
+
+\begin{equation*}
+    f ( x , y ) \approx f ( x_{eq} , y_{eq} ) + \left( \frac { \partial f } { \partial x } \right) ( x - x_{eq} ) + \left( \frac { \partial f } { \partial y } \right) ( y - y_{eq} )
+\end{equation*}
+\begin{equation*}
+     g ( x , y ) \approx g ( x_{eq} , y_{eq} ) + \left( \frac { \partial g } { \partial x } \right) ( x - x_{eq} ) + \left( \frac { \partial g } { \partial y } \right) ( y - y_{eq} )
+\end{equation*}
+
+A critical point has $ f ( x_{eq} , y_{eq} ) = g ( x_{eq} , y_{eq} ) = 0 $. So, the equation becomes linear combination of x and y. So, the general equation becomes,
+
+\begin{equation*}
+    \left[ \begin{array} { c } ( x - x_{eq} ) ^ { \prime } \\ ( y - y_{eq} ) ^ { \prime } \end{array} \right] \approx \left[ \begin{array} { l l } \partial f / \partial x & \partial f / \partial y \\ \partial g / \partial x & \partial g / \partial y \end{array} \right] \left[ \begin{array} { c } x - x_{eq} \\ y - y_{eq} \end{array} \right] = J \left[ \begin{array} { c } x - x_{eq} \\ y - y_{eq} \end{array} \right] 
+\end{equation*}
+
+\subsection*{Implementation of Linearisation for Predator-Prey Problem}
+
+The critical points are (0,0) and ($\frac{\gamma}{\delta}$,$\frac{\alpha}{\beta}$) \\
+\subsubsection*{First critical point}
+At x_{eq}, y_{eq} = (0,0) \\
+
+\begin{equation*}
+J = \left[ \begin{array} { l l } \partial f / \partial x & \partial f / \partial y \\ \partial g / \partial x & \partial g / \partial y \end{array} \right] = \left[ \begin{array} { c c } \alpha - \beta y_{eq} & - \beta x_{eq} \\ \delta y_{eq} & \delta x_{eq} - \gamma \end{array} \right] = \left[ \begin{array} { c c } \alpha & 0 \\ 0 & - \gamma \end{array} \right]
+    
+\end{equation*}
+The eigenvalues of this matrix are $ \lambda _ { 1 } = \alpha , \quad \lambda _ { 2 } = - \gamma $. As the eigen values are oppsoite in sign and always greater than zero, so the fixed point near origin will be saddle point. Near critical point (0,0) the baboon's population $ x ( t ) $ will grow but the population of cheetahs $y(t)$ will decay. It can only happen when there is very less interaction between predator and prey. So, extinction can only happen when prey are artifically eradicated due to which cheetahs will die due to natural reasons(starvation etc).
+
+\begin{equation*}
+    \left[\begin{array} { c } \frac { d x ( t ) } { d t } \\ \frac { d y ( t ) } { d t } \end{array} \right] = c _ { 1 } \left[ \begin{array} { l } 1 \\ 0 \end{array} \right] e ^ { \alpha t } + c _ { 2 } \left[ \begin{array} { l } 0 \\ 1 \end{array} \right] e ^ { - \gamma t } 
+\end{equation*}
+\subsubsection*{Second Critical Point}
+At (x_{eq}, y_{eq})=($\frac{\gamma}{\delta}$,$\frac{\alpha}{\beta}$) \\
+
+\begin{equation*}
+    J \left( \frac { \gamma } { \delta } , \frac { \alpha } { \beta } \right) = \left[ \begin{array} { l l } \partial f / \partial x & \partial f / \partial y \\ \partial g / \partial x & \partial g / \partial y \end{array} \right] = \left[ \begin{array} { c c } \alpha - \beta y_{eq} & - \beta x_{eq} \\ \delta y_{eq} & \delta x_{eq} - \gamma \end{array} \right] = \left[ \begin{array} { c c } 0 & - \frac { \beta \gamma } { \delta } \\ \frac { \alpha \delta } { \beta } & 0 \end{array} \right]
+\end{equation*}
+
+
+The eigenvalues of this matrix are
+$ \lambda _ { 1 } = i \sqrt { \alpha \gamma } = +i \omega , \quad \lambda _ { 2 } = - i \sqrt { \alpha \gamma } = - i \omega. $
+Because the real part is zero, so the stability is neutral and critical points are center. The solution will form closed trajectories surrounding the critical point(1,1). Consequently, the levels of
+the predator and prey populations cycle, and oscillate around this fixed point.
+
+Extra baboons $ \rightarrow $ Cheetahs increase $ \rightarrow $ Baboons decrease $ \rightarrow $ Cheetahs decrease $ \rightarrow $ Extra Baboons
+
+\begin{equation*}
+     \left[\begin{array} { c } \frac { d x ( t ) } { d t } \\ \frac { d y ( t ) } { d t } \end{array} \right] = c _ { 1 } \left[\begin{array} { c } \cos ( \omega t ) \\ A \sin ( \omega t ) \end{array} \right] + c _ { 2 } \left[ \begin{array} { c } \sin ( \omega t ) \\ - A \cos ( \omega t ) \end{array} \right]
+\end{equation*}
+where,
+\begin{equation*}
+    A = \frac { \delta } { \beta } \sqrt { \frac { \alpha } { \gamma } }
+\end{equation*}
+To check whether the solution forms a perfect circle we will solve for $ \frac { d x} { d y } $ with separation of variables.
+
+\begin{equation*}
+    \frac { d x } { d y } = \frac { d x / d t } { d y / d t } = \frac { f } { g } = \frac  { x(\alpha  - \beta  y)} { y(\delta x  - \gamma )}
+\end{equation*}
+gives,
+\begin{equation*}
+    \frac { \delta x - \gamma}{x}  d x = \frac  {\alpha - \beta y }{ y } d y
+\end{equation*}
+\begin{equation*}
+     \frac  {\alpha - \beta y }{ y } d y - \frac { \delta x - \gamma}{x}  d x = 0
+\end{equation*}
+Integrating on both sides with respect to y and x gives
+\begin{equation*}
+      Q(x,y) = \alpha \ln ( y ) - \beta y + \gamma \ln ( x ) - \delta x   = C
+\end{equation*}
+
+
+The constant is
+The graph formed by Q(x,y) should be nearly circular.
+%Sets the bibliography style to UNSRT and imports the 
+%bibliography file "samples.bib".
+\bibliographystyle{unsrt}
+\bibliography{bibliography.bib}
+\end{document}
