@@ -1,3 +1,20 @@
+#Euler for diff h
+set term pngcairo enhanced size 1280,1024
+set datafile separator ","
+set output 'euler_diff_h.png'
+set border linewidth 2
+
+set multiplot layout 2,1 #title "Time v/s Population" font "enhanced [,30]"
+set key top left Left box title 
+set xlabel 'Time(Years)' 
+set ylabel 'Population'
+set title "Euler Method(Predator) for different step sizes(h)"  font "enhanced [,20]"
+plot "Euler_data.csv" u 1:2 title "n = 1000" , "Euler_data.csv" u 4:5 title "n=10000" , "Euler_data.csv" u 7:8 title "n = 100000", "Euler_data.csv" u 10:11 title "n = 1000000"
+set title "Euler Method(Prey) for different step sizes"  font "enhanced [,20]"
+plot "Euler_data.csv" u 1:3 title "n = 1000" , "Euler_data.csv" u 4:6 title "n=10000" , "Euler_data.csv" u 7:9 title "n = 100000", "Euler_data.csv" u 10:12 title "n = 1000000"
+unset multiplot
+
+#Plotting time v/s population
 set term pngcairo enhanced size 1280,1024
 
 
@@ -22,6 +39,8 @@ plot "test.csv" u 1:5  title "Predator" w l, "test.csv" u 1:9  title "Prey" w l
 set title "rk4"
 
 unset multiplot
+
+
 
 #Error Plot for predator and prey
 set term pngcairo enhanced size 1280,1024
