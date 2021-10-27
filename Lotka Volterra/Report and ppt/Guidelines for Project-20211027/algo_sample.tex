@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsthm}
+\usepackage{verbatim}% To print as typed ignoring the LaTeX commands
+\begin{document}
+
+\title{Algorithm Sample}
+%\author{Mamta Dahiya}
+
+\maketitle
+
+\section*{How to write Algorithm in LaTeX}
+
+{\bf Use packages 'algorithm' and 'algpseudocode'}. AN example is given below:
+
+
+\begin{algorithm}
+  \caption{Recursive edit-distance}
+  \begin{algorithmic}
+    \Procedure{Edit-Distance}{$str1, str2, m, n$}\\
+    \Comment number of operations to convert str1 into str2
+      \If{$m = 0$}
+        \State \Return $n$  \Comment Insert all n characters of str2
+      \EndIf
+      \If{$n = 0$}
+        \State \Return $m$  \Comment Delete all m character of str1
+      \EndIf
+      \If{$str1[m] = str2[m]$}
+        \State \Return \textsc{Edit-Distance}$(str1, str2, m-1, n-1)$ \Comment copy
+      \EndIf
+      \State \Return $1 + min\{\textsc{Edit-Distance}(str1, str2, m-1, n-1),$ \Comment replace\\
+        \hspace{1.25in}\textsc{Edit-Distance}$(str1, str2, m-1, n),$ \Comment delete $str1[m]$\\
+        \hspace{1.25in}\textsc{Edit-Distance}$(str1, str2, m, n-1)$\} \Comment insert $str2[n]$
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+See the TeX file to know how the above algorithm is produced.
+Read the documentation of the package 'algorithm' for more details.
+\end{document}
