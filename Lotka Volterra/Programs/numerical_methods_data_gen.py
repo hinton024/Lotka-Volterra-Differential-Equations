@@ -85,6 +85,7 @@ def main():
 
 alpha = 1.1;beta = 0.4;delta = 0.1;gamma = 0.4;x0 = 10;y0 = 10;tmax = 100
 N_arr=[1000,10000,100000,1000000]
+
 for Nt in N_arr:
     k=main()
     t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data=k
