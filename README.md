@@ -1,6 +1,6 @@
 # Project
 Computational Physics Project
-Project Proposal [link](https://www.overleaf.com/read/cnqyspfhdsqt)
+Project Proposal [link](https://www.overleaf.com/read/cnqyspfhdsqt )
 
 Project Report  [link](https://www.overleaf.com/project/617327c8f10828007c341bb0)
 
