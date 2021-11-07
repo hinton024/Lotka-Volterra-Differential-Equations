@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import integrate
 from matplotlib.animation import FuncAnimation 
+import pylab as p
+
 
 def eqn(t,X, cons):   #Defining Equations 
     x, y = X          #Assigning x,y values 
