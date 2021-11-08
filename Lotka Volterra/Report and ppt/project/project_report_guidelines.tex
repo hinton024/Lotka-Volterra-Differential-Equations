@@ -30,6 +30,10 @@
 \usepackage[titletoc]{appendix}
 \usepackage{rotating}
 \usepackage{lipsum}  
+\usepackage{comment}
+\usepackage{subfiles} %To work with multiple tex files in project
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
 %\usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
 \usepackage [english]{babel}
@@ -150,7 +154,7 @@ where,
 \section*{Motivation}
 As differential equations are one of the most important concepts related to analyse real life phenomenas. We are doing Lotka Volterra Model because it gives us glimpse predator and pre their interaction works and interestingly gives us mathematical formulation through which we can make predictions to take legitimite actions to make this wildlife balance. \\
 
-In next section, we will do mathematical modelling and describe analytical solution of problem.
+In next section, we will do mathematical modelling and describe linearisation of problem.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -204,7 +208,7 @@ The possibilities are,
     \item \alpha - \beta y = 0 \Longrightarrow $y_{eq} = \frac{\alpha}{\beta}$ similarily $x_{eq} = \frac{\gamma}{\delta}$
 \end{itemize}
 
-\section*{Implementation of Linearisation for Predator-Prey \\ Problem and Analytical solution} \cite{noauthor_differential_nodate}
+\section*{Implementation of Linearisation for Predator-Prey \\ Problem } \cite{noauthor_differential_nodate}
 
 \begin{equation*}
     f ( x , y ) \approx f ( x_{eq} , y_{eq} ) + \left( \frac { \partial f } { \partial x } \right) ( x - x_{eq} ) + \left( \frac { \partial f } { \partial y } \right) ( y - y_{eq} )
@@ -234,6 +238,9 @@ The eigenvalues of this matrix are $ \lambda _ { 1 } = \alpha , \quad \lambda _ 
 \begin{equation*}
     \left[\begin{array} { c } \frac { d x ( t ) } { d t } \\ \frac { d y ( t ) } { d t } \end{array} \right] = c _ { 1 } \left[ \begin{array} { l } 1 \\ 0 \end{array} \right] e ^ { \alpha t } + c _ { 2 } \left[ \begin{array} { l } 0 \\ 1 \end{array} \right] e ^ { - \gamma t } 
 \end{equation*}
+
+
+
 \subsubsection*{Second Critical Point}
 At (x_{eq}, y_{eq})=($\frac{\gamma}{\delta}$,$\frac{\alpha}{\beta}$) \\
 
@@ -273,6 +280,7 @@ Integrating on both sides with respect to y and x gives
       Q(x,y) = \alpha \ln ( y ) - \beta y + \gamma \ln ( x ) - \delta x   = C
 \end{equation*}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methodology}
 \label{sec:method}
@@ -281,23 +289,69 @@ Integrating on both sides with respect to y and x gives
     \item Algorithms of the numerical methods used -- use the package for the algorithm.
     \item scipy.integrate.odeint \cite{noauthor_scipyintegrateodeint_nodate}
 \end{itemize}
-
+\subsection{Algorihtm}
+\subfile{algorithm.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Analysis of Numerical Results}
 Include all graphs, tables and analysis of the results. This should be a detailed section. There is no restriction of length here.
-\newpage
-\begin{figure}[h]
+
+\begin{figure}[h] %Euler for diff h
     \centering
-    \includegraphics[width=15cm,height=12cm]{time_vs_population.png}
-\caption{Time v/s Population}
+    \includegraphics[width=15cm,height=12cm]{euler_diff_h.png}
+\caption{Euler Method For different step sizes $+$ symbol in purple color for 1000 data points, $\times$ symbol in green 10000, * symbol in sky blue 10000 and $\square$ symbol in mustard 100000 data points respectively\newline SubFig(a) Population of Predator v/s time(years) \newline SubFig(b) Population of Prey v/s time(years) }
 \end{figure}
 
+\newpage
+\begin{figure}[h] %rk2 for diff h
+    \centering
+    \includegraphics[width=15cm,height=12cm]{rk2_diff_h.png}
+\caption{Rk2 Method for different step sizes}
+\end{figure}
+
+\newpage
+\begin{figure}[h] %Euler for diff h
+    \centering
+    \includegraphics[width=15cm,height=12cm]{rk4_diff_h.png}
+\caption{Rk4 Method for different step sizes}
+\end{figure}
+\newpage
 \begin{figure}[h]
     \centering
     \includegraphics[width=15cm,height=12cm]{error_plot.png}
 \caption{Error Plot }
 \end{figure}
+
+\newpage
+\begin{figure}[h] 
+    \centering
+    \includegraphics[width=15cm,height=12cm]{time_vs_population.png}
+\caption{Time v/s Population}
+\end{figure}
+
+
+
+\newpage
+\begin{figure}[h] %Euler for diff h
+    \centering
+    \includegraphics[width=12cm,height=12cm]{trajectories.png}
+\caption{Trajectories and Direction fields(h)}
+\end{figure}
+
+
+\newpage
+\begin{figure}[h] %Euler for diff h
+    \centering
+    \includegraphics[width=18cm,height=12cm]{table.png}
+\caption{Table}
+\end{figure}
+
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Summary}
@@ -318,8 +372,6 @@ Python Program including numerical methods impementation and data generation for
 \begin{lstlisting}[language=Python, caption=Python example]
 
 import numpy as np
-from numpy.core.fromnumeric import shape
-from numpy.core.numeric import allclose
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import integrate
@@ -390,20 +442,21 @@ def main():
     Xr4 = RK4(eqn, X0,0.,tmax,Nt,cons)       #calling RK4
     x3,y3=Xr4[0].T
 
-    xee=[];yee=[];xer2=[];yer2=[];xer4=[];yer4=[]               #Creating empty lists for appending values of absolute error
+    xee=[];yee=[];xer2=[];yer2=[];xer4=[];yer4=[]               #Creating empty lists for appending values of abs(odeint-numrical method(euler/rk2/rk4))/odeint
     for i in range(len(x)):                               #comparing our results of Euler,RK2,RK4 with Scipy's ODEint for finding error
         xee.append((x[i]-x1[i])/x[i])
         yee.append((y[i]-y1[i])/y[i])
         xer2.append((x[i]-x2[i])/x[i])
         yer2.append((y[i]-y2[i])/y[i])
         xer4.append((x[i]-x3[i])/x[i])
-        yer4.append((y[i]-y3[i])/y[i])              #appending values of absolute error
+        yer4.append((y[i]-y3[i])/y[i])              #appending values 
     V_data = V(X=[x3,y3],cons=cons)
-    return (t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data)                 
+    return (t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data) 
+                   
+alpha = 0.453;beta = 0.0205;gamma = 0.790;delta = 0.0229;x0 = 30;y0 = 4;tmax = 100        #Assigning values of initial conditions,parameters
+N_arr=[1000,10000,100000,1000000]                #array for different number of steps
 
-alpha = 1.1;beta = 0.4;delta = 0.1;gamma = 0.4;x0 = 10;y0 = 10;tmax = 100
-N_arr=[1000,10000,100000,1000000]
-for Nt in N_arr:
+for Nt in N_arr:                                 #calculations for different N and storing values in csv files
     k=main()
     t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data=k
     DataOut111 = np.column_stack((t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data))
@@ -416,30 +469,119 @@ for Nt in N_arr:
     elif Nt==1000000:
         np.savetxt('data_1000000.csv', DataOut111,delimiter=',') 
 
-print("FOR N=100000")
+Nt=10000
+G=main()
+t,x,x1,x2,x3,y,y1,y2,y3,xee,yee,xer2,yer2,xer4,yer4,V_data=G
+print("FOR N = ",Nt)
 print("----------------------TABLE SHOWING VARIATION OF POPULATION OF PREY(x) WITH TIME(t)-------------------------")
-data={"t":t,"x(ODEINT)":x ,"x(Euler)":x1,"x(RK2)":x2,"x(RK4)":x3,"Ab Error (Euler)":xee,"Ab Error (RK2)":xer2,"Ab Error (RK4)":xer4}
+data={"t":t,"x(ODEINT)":x ,"x(Euler)":x1,"x(RK2)":x2,"x(RK4)":x3,"[x(odeint)-x(euler)]/x(odeint)":xee,"[x(odeint)-x(rk2)]/x(odeint)":xer2,"[x(odeint)-x(rk4)]/x(odeint)":xer4}
 print(pd.DataFrame(data))
 print("--------------------TABLE SHOWING VARIATION OF POPULATION OF PREDATOR(y) WITH TIME(t)-----------------------")
-data={"t":t,"y(ODEINT)":y ,"y(Euler)":y1,"y(RK2)":y2,"y(RK4)":y3,"Ab Error (Euler)":yee,"Ab Error (RK2)":yer2,"Ab Error (RK4)":yer4}
+data={"t":t,"y(ODEINT)":y ,"y(Euler)":y1,"y(RK2)":y2,"y(RK4)":y3,"[y(odeint)-y(euler)]/y(odeint)":yee,"[y(odeint)-y(rk2)]/y(odeint)":yer2,"[y(odeint)-y(rk4)]/y(odeint)":yer4}
 print(pd.DataFrame(data))
 
 X_e1 = np.array([     0 ,  0])                   #Equilibrium condition 1
-X_e2 = np.array([ gamma/delta, alpha/beta])      #Equilibrium condition 2 
-#d=np.zeros(2)                                    # Creating array [0,0]
-
+X_e2 = np.array([ gamma/delta, alpha/beta])      #Equilibrium condition 2                                   
 print("GROWTH RATE AT EQUILIBRIUM POINTS FOUND ANALYTICALLY")
-#prints true if the growth rate is zero
-print(eqn1(X_e1,t,alpha,beta,delta,gamma))
-print(eqn1(X_e2,t,alpha,beta,delta,gamma))
-#print(np.allclose(eqn1(X_e1,t,alpha,beta,delta,gamma),d)) #Checking if the growth rate of predator and prey is zero at equilibrium condition 1
-#print(np.allclose(eqn1(X_e2,t,alpha,beta,delta,gamma),d)) #Checking if the growth rate of predator and prey is zero at equilibrium condition 2
+print("At (0,0), Growth Rate = ",eqn1(X_e1,t,alpha,beta,delta,gamma))
+print("At (gamma/delta,alpha/beta), Growth Rate = ",eqn1(X_e2,t,alpha,beta,delta,gamma))
+
+#Plotting Trajectories and direction fields
+values  = np.linspace(1,5, 5)                          
+X_f1 = np.array([ int(gamma/delta), int(alpha/beta)])
+vcolors = plt.cm.autumn_r(np.linspace(0.1, 0.9, len(values)))  # colors for each trajectory
+h1=[];h2=[]
+for v, col in zip(values, vcolors):
+    X0 = v * X_f1                             # starting point
+    X = integrate.odeint(eqn1, X0, t, args = (alpha, beta, delta, gamma))     
+    plt.plot( X[:,0], X[:,1], lw=3.5, color=col, label='X0=(%.f, %.f)' % ( X0[0], X0[1]) )
+    plt.legend()
+    h1.append(X0[0])
+    h2.append(X0[1])
+
+ymax = plt.ylim(ymin=0)[1]                    # get axis limits
+xmax = plt.xlim(xmin=0)[1]
+nb_points   = 30
+
+x = np.linspace(0, xmax, nb_points)
+y = np.linspace(0, ymax, nb_points)
+
+X1 , Y1  = p.meshgrid(x, y)    # create a grid     
+DX1, DY1 = eqn1([X1,Y1], t, alpha, beta, delta, gamma)               # compute growth rate on the grid
+M = (np.hypot(DX1, DY1))                           # Norm of the growth rate 
+M[ M == 0] = 1.                              # Avoid zero division errors 
+DX1 /= M                                        # Normalize each arrows
+DY1 /= M
+
+plt.title('Trajectories and direction fields')
+plt.scatter(h1,h2,color="black",marker="*",s=300,label="Initial Conditions")
+Q = plt.quiver(X1, Y1, DX1, DY1, M, pivot='mid', cmap=p.cm.jet)
+plt.xlabel('Number of prey')
+plt.ylabel('Number of predator')
+plt.legend()
+plt.grid()
+plt.xlim(0, xmax)
+plt.ylim(0, ymax)
+plt.show()
+
+#ANIMATION
+fig = plt.figure()
+ax1 = plt.subplot(2, 1, 1)
+ax2 = plt.subplot(2, 1, 2)
+data_skip = 200
+
+def init_func():
+    ax1.clear()
+    ax2.clear()
+    ax1.set_xlabel('Time ')
+    ax1.set_ylabel('Prey(red) & Predator(green)')
+    ax2.set_xlabel('Prey')
+    ax2.set_ylabel('Predator')
+    ax1.set_xlim((t[0], t[-1]))
+    ax1.set_ylim((0, 85))
+    ax1.grid()
+    ax2.set_xlim((5,85))
+    ax2.set_ylim((0,70))
+    ax2.grid()
+
+def update_plot(i):
+    ax1.plot(t[i:i+data_skip], x3[i:i+data_skip], color='k')
+    ax1.scatter(t[i], x3[i], marker='o', color='r',label="prey")
+    ax1.plot(t[i:i+data_skip], y3[i:i+data_skip], color='k')
+    ax1.scatter(t[i], y3[i], marker='o', color='green',label="predator")
+    ax2.plot(x3[i:i+data_skip], y3[i:i+data_skip], color='k')
+    ax2.scatter(x3[i], y3[i], marker='o', color='magenta')
+
+anim = FuncAnimation(fig,
+                     update_plot,
+                     frames=np.arange(0, len(t), data_skip),
+                     init_func=init_func,
+                     interval=1)
+
+anim.save('animation_Lot_Vol.gif', dpi=150, fps=10, writer='ffmpeg')
 
 
 \end{lstlisting}
 \newpage
 \section*{Programs for Plotting}
 \begin{lstlisting}[language=Gnuplot, caption=Plotting example]
+#Euler for diff h
+set term pngcairo enhanced size 1280,1024
+set datafile separator ","
+set output 'euler_diff_h.png'
+set border linewidth 2
+
+set multiplot layout 2,1 
+set key top left Left box title 
+set xlabel 'Time(Years)' 
+set ylabel 'Population'
+set title "Euler Method(Predator) for different step sizes"  font "enhanced [,20]"
+plot "Euler_data.csv" u 1:2 title "n = 1000" , "Euler_data.csv" u 4:5 title "n=10000" , "Euler_data.csv" u 7:8 title "n = 100000", "Euler_data.csv" u 10:11 title "n = 1000000"
+set title "Euler Method(Prey) for different step sizes"  font "enhanced [,20]"
+plot "Euler_data.csv" u 1:3 title "n = 1000" , "Euler_data.csv" u 4:6 title "n=10000" , "Euler_data.csv" u 7:9 title "n = 100000", "Euler_data.csv" u 10:12 title "n = 1000000"
+unset multiplot
+
+#Plotting time v/s population
 set term pngcairo enhanced size 1280,1024
 
 
@@ -464,6 +606,8 @@ plot "test.csv" u 1:5  title "Predator" w l, "test.csv" u 1:9  title "Prey" w l
 set title "rk4"
 
 unset multiplot
+
+
 
 #Error Plot for predator and prey
 set term pngcairo enhanced size 1280,1024
