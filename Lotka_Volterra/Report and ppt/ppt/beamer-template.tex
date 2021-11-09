@@ -1,0 +1,144 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+%\usepackage{BeamerColor}
+\usepackage{pdfpages}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{adjustbox}
+\usepackage{lipsum}
+\usepackage{xcolor,colortbl}
+%\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{booktabs} % For prettier tables
+\usepackage{beamerthemeshadow}
+\usepackage{ragged2e}
+\usepackage[utf8,latin1]{inputenc}
+%
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage[english]{babel}
+\usepackage{helvet}
+%\usepackage[latin1]{inputenc}
+\usefonttheme{professionalfonts}
+\usepackage{times}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{physics}
+\usepackage{siunitx}
+\usepackage{amsthm}
+\usepackage{yfonts}
+%\usepackage[inline]{enumitem}
+\usepackage{tcolorbox}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+
+\usetikzlibrary{arrows,shapes}
+
+\definecolor{boxblue}{rgb}{0.9,0.9,1.0} 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=3pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Change the bar colors:
+%\setbeamercolor{Feather}{fg=blue!20,bg=blue}
+
+% Change the color of the structural elements:
+\setbeamercolor{structure}{fg=blue}
+\setbeamercolor{frametitle}{fg=blue}
+\setbeamercolor{normal text}{fg=black,bg=white!10}
+\def\comment#1{\textcolor{red}{\large(\it{#1})}}
+\def\hldc#1{\textcolor{red}{\large\textsf{#1}}}
+\definecolor{darkgreen}{cmyk}{1,0,1,0.4}
+\def\hlsd#1{\textcolor{darkgreen}{\large\textsl{#1}}}
+\def\hlbr#1{\textcolor{magenta}{\large\textsl{#1}}}
+\definecolor{darkred}{cmyk}{0,1,0.5,0.4}
+\def\hlds#1{\textcolor{darkred}{\large\textsl{#1}}}
+
+% \def\be{\begin{equation}}
+% \def\ee{\end{equation}}
+% \def\bea{\begin{eqnarray}}
+% \def\eea{\end{eqnarray}}
+% \def\barr{\begin{array}}
+% \def\earr{\end{array}}
+% \def\ben{\begin{enumerate}}
+% \def\een{\end{enumerate}}
+% \def\bitem{\begin{itemize}}
+% \def\eitem{\end{itemize}}
+% \def\nn{\nonumber}
+% \def\sch{Schr\"{o}dinger}
+% \def\scheq{Schr\"{o}dinger Equation }
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+ %   \renewcommand{\arraystretch}{1.8}
+%\newtheorem{definition}{Definition}
+\mode<presentation>
+{
+ \usetheme{CambridgeUS}
+ \usefonttheme[onlylarge]{structuresmallcapsserif}
+ \usefonttheme[onlysmall]{structurebold}
+
+}
+
+\title{Project Presentation}
+\author{Team 18 }
+\institute{SGTB Khalsa College, DU}
+\date{\today}
+%\date{August 2020}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%Title Frame
+\begin{frame}
+  \titlepage Predator-Prey (Lotka-Volterra) Model
+\vspace*{-10pt}
+\end{frame}
+%\tableofcontents
+%%%%%%%%%%%%%%%
+\input{slide1}
+\input{slide2}
+\input{slide3}
+\input{slide4}
+\input{slide5}
+\input{slide6}
+\input{slide7}
+\input{slide8}
+
+\input{slide9}
+
+% \input{slide3}
+% \input{slide4}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}
