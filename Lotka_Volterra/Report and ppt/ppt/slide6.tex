@@ -1,0 +1,28 @@
+
+
+
+
+
+
+
+
+\begin{frame}
+    \frametitle{Predator-Prey Model Analysis}
+ %     \framesubtitle{Subtitle 1}
+Linear Analysis at critical points(At x_{eq}, y_{eq} = (0,0)) \\
+\begin{equation*}
+J = \left[ \begin{array} { l l } \partial f / \partial x & \partial f / \partial y \\ \partial g / \partial x & \partial g / \partial y \end{array} \right] = \left[ \begin{array} { c c } \alpha - \beta y_{eq} & - \beta x_{eq} \\ \delta y_{eq} & \delta x_{eq} - \gamma \end{array}  \right] =  \left[ \begin{array} { c c } \alpha & 0 \\ 0 & - \gamma \end{array} \right]
+\end{equation*} \\
+This matrix (diagonal) has the eigenvalues and associated eigenvectors: \\
+$ \lambda _ { 1 } = \alpha , \quad v _ { 1 } = \left( \begin{array} { l } 1 \\ 0 \end{array} \right) , \quad $ and $ \quad \lambda _ { 2 } = -\gamma , \quad v _ { 2 } = \left( \begin{array} { l } 0 \\ 1 \end{array} \right) $
+
+Thus, the equilibrium $ ( 0,0 ) $ is a saddle node with solutions exponentially growing
+along the $ x $-axis and decaying along the $ y $-axis, so\\
+
+\begin{equation*}
+    \left[ \begin{array} { l } \frac { d x ( t ) } { d t } \\ \frac { d y ( t ) } { d t } \end{array} \right] = c _ { 1 } \left[ \begin{array} { l } 1 \\ 0 \end{array} \right] e ^ { \alpha t } + c _ { 2 } \left[ \begin{array} { l } 0 \\ 1 \end{array} \right] e ^ { - \gamma t }
+\end{equation*}
+
+\end{frame}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%  
