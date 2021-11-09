@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
+\usepackage{amsthm}
+\usepackage{verbatim}% To print as typed ignoring the LaTeX commands
+\begin{document}
+
+%\title{Algorithm Sample}
+%\author{Mamta Dahiya}
+
+\maketitle
+
+\begin{algorithm}
+  \caption{Slope Function($f$)}
+  \begin{algorithmic}
+  \LComment{input time, initial conditions and parameters $\alpha$, $\beta$, $\delta$, $\gamma$ stored in tuple} 
+  \Procedure{Input}{$t, x, parameters$}
+    
+    \State $x$, $y$ = X \Comment{An array to store $x$, $y$} \\
+    \SET $\frac { d x } { d t } = \alpha x - \beta x y $ \\
+    \Comment{\text{growth rate of prey}} \\
+    \SET $\frac { d y } { d t } = \delta x y - \gamma y$ \\
+    \Comment{\text{growth rate of predator}} \\
+    \Return array of $\frac { d x } { d t }$ and $\frac { d y } { d t }$
+    \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+\begin{algorithmic}
+\caption{Euler Method}
+\Function{INPUT}{$f$, \text{$initial$ $conditions$}, $t_{max}$, $t_{min}$, $N$, $parameters$}
+\LComment{Here N is number of steps, $t_{max}$, $t_{min}$ are initial and final conditions} \\
+\textbf{Define} t \leftarrow \text{array of time}
+\LComment{Time array between $t_{max}$ and $t_{min}$ having $N$ data points }\\
+\textbf{Calculate} dt \leftarrow \text{step size} 
+\LComment{Difference of two consecutive elements of time array} \\
+\textbf{Define} X \leftarrow \text{Empty array} 
+\LComment{Empty array having two columns and N rows to store values of predator and prey }
+$X \leftarrow X_{0} $
+\LComment{Assigning Initial conditions to output array}
+\ForAll{$i \in \{1, \dots, N\}$}
+\State $X _ { i + 1 } = X _ { i } + \text{$f$} \left( t _ { i } , x _ { i }, paramteres \right)dt$ \\
+\Return X, t
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+\newpage
+
+\begin{algorithm}
+\begin{algorithmic}
+\caption{Rk2 Method}
+\Function{INPUT}{$f$, \text{$initial$ $conditions$}, $t_{max}$, $t_{min}$, $N$, $parameters$}
+\LComment{Here N is number of steps, $t_{max}$, $t_{min}$ are initial and final conditions} \\
+\textbf{Define} t \leftarrow \text{array of time}
+\LComment{Time array between $t_{max}$ and $t_{min}$ having $N$ data points }\\
+\textbf{Calculate} dt \leftarrow \text{step size} 
+\LComment{Difference of two consecutive elements of time array} \\
+\textbf{Define} X \leftarrow \text{Empty array} 
+\LComment{Empty array having two columns and N rows to store values of predator and prey }
+$X \leftarrow X_{0} $
+\LComment{Assigning Initial conditions to output array}
+\ForAll{$i \in \{1, \dots, N\}$} \\
+\State $  k _ { 1 } = dt (\text{$f$} \left( t _ { i }, X _ { i }, paramteres \right))$ \\
+$k _ { 2 } = dt (\text{$f$} \left( t _ { i } + dt , x _ { i } + k_{1}, paramteres \right)) $ \\
+$X_{i+1} = X_{i} + \frac{\left( k_{1} + k _ { 2 } \right)}{2}$ \\
+\Return X, t
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+\newpage
+\begin{algorithm}
+\begin{algorithmic}
+\caption{Rk4 Method}
+\Function{INPUT}{$f$, \text{$initial$ $conditions$}, $t_{max}$, $t_{min}$, $N$, $parameters$}
+\LComment{Here N is number of steps, $t_{max}$, $t_{min}$ are initial and final conditions} \\
+\textbf{Define} t \leftarrow \text{array of time}
+\LComment{Time array between $t_{max}$ and $t_{min}$ having $N$ data points }\\
+\textbf{Calculate} dt \leftarrow \text{step size} 
+\LComment{Difference of two consecutive elements of time array} \\
+\textbf{Define} X \leftarrow \text{Empty array} 
+\LComment{Empty array having two columns and N rows to store values of predator and prey }
+$X \leftarrow X_{0} $
+\LComment{Assigning Initial conditions to output array}\ForAll{$i \in \{1, \dots, N\}$} \\
+\State $  k _ { 1 } = \text{$f$} \left( t _ { i }, X _ { i }, paramteres \right)$ \\
+$k _ { 2 } = dt (\text{$f$} \left( t _ { i } + dt/2 , x _ { i } + dt/2 \times k_{1}, paramteres \right)) $ \\
+$ k _ { 3 } = h f \left( t _ { i } + \frac { dt } { 2 } , X _ { i } + dt \times k_{3}, parameters \right)$ \\
+$ k _ { 4 } = f \left( t _ { i } + dt , X _ { i } + dt \times k_{3}, parameters \right)$ \\
+$ X _ { i + 1 } = X _ { i } + \frac { 1 } { 6 } \left( k _ { 1 } + 2 k _ { 2 } + 2 k _ { 3 } + k _ { 4 } \right)$ \\
+
+\Return X, t
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
