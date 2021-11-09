@@ -1,0 +1,30 @@
+
+
+
+
+
+
+
+
+\begin{frame}
+    \frametitle{Predator-Prey Model Analysis}
+ %     \framesubtitle{Subtitle 1}
+Linear Analysis: The nonlinear model satisfies the system of $ \boldsymbol { O D E s } $ :
+\begin{equation*}
+    \frac { d y } { d t } = \delta x y - \gamma y = 0
+\end{equation*}
+\begin{equation*}
+     \frac { d x } { d t } = \alpha x - \beta x y = 0
+\end{equation*}
+To linearise given equation convert it into this form
+\begin{equation*}
+ \left[\begin{array} { c } \frac { d x } { d t } \\ \frac { d y} { d t } \end{array} \right]=  
+    \left[ \begin{array} { c } ( x - x_{eq} ) ^ { \prime } \\ ( y - y_{eq} ) ^ { \prime } \end{array} \right] \approx J\left[ \begin{array} { c } x - x_{eq} \\ y - y_{eq} \end{array} \right]\end{equation*} \\
+Here J is jacobean of given matrix \\
+\begin{equation*}
+J = \left[ \begin{array} { l l } \partial f / \partial x & \partial f / \partial y \\ \partial g / \partial x & \partial g / \partial y \end{array} \right] = \left[ \begin{array} { c c } \alpha - \beta y_{eq} & - \beta x_{eq} \\ \delta y_{eq} & \delta x_{eq} - \gamma \end{array} \right]
+    
+\end{equation*}
+\end{frame}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%  
