@@ -1,5 +1,6 @@
 # Computational Physics Project
 Lotka Volterra Model(Team 18) SGTB Khalsa College(University of Delhi, India)
+
 Project Proposal [link](https://www.overleaf.com/read/cnqyspfhdsqt )
 
 Project Report  [link](https://www.overleaf.com/project/617327c8f10828007c341bb0)
