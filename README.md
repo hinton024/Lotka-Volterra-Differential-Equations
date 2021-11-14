@@ -1,5 +1,5 @@
 # Computational Physics Project
-Lotka Volterra Model(Team 18) SGTB Khalsa College(University of Delhi, India)
+Lotka Volterra Model(Team 18) SGTB Khalsa College(University of Delhi, India )
 
 Google Colab [link](https://colab.research.google.com/drive/1L-7TqKQcLsYmEsouKT6kHkSXXk9bCr_H?usp=sharing)
 
